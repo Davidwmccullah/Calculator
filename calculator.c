@@ -39,6 +39,7 @@ void operationChoice(void){
 		switch(operation){
 			case 1 :
 				printInstructions();
+				printf(">");
 				break;
 			case 2 :
 				exponent();
@@ -71,6 +72,10 @@ void operationChoice(void){
 				break;
 		}
 	}
+}
+
+void printInstructions(void){
+	//print the user manual
 }
 
 void exponent(void){

@@ -3,10 +3,16 @@
 #Calculator
 #A command-line calculator application.
 
-CFLAGS := -std=c11 -ggdb -O0
+#Variable Declarations
+CC := gcc
+CFLAGS := -std=c11 -Wall -ggdb -O0 -lm
+SOURCES := calculator.c calculator.h
 
-calculator : calculator.c calculator.h
-	gcc -o -lm calculator.c calculator
+calculator : $(SOURCES)
+	$(CC) $(CFLAGS) $^ -o $@
+
+#calculator : calculator.c calculator.h
+#	gcc -std=c11 -Wall -ggdb -O0 -lm calculator.c -o calculator
 
 .PHONY : clean
 clean :
