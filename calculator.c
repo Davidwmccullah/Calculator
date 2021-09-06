@@ -2,81 +2,71 @@
 //4 August 2021
 //A simple calculator application.
 
-
-///TODO Create error handling for scanning in numbers (what if someone types in "a" instead of an actual number???
-//Use "isdigit" for this but, the POS function wouldnt return 1 when it was actually true, so figure that out...
+//TODO
 //Don't allow division by 0!!!!!!!!!!
-//use gets() to read in a string of a certain size.
-
+//use gets() to read in a string of a certain size. BADDDD gets is insecure and not included in libraries anymore
+//Change datatypes (eg, all functions should use doubles)
+////Add a manual option and explain limitations of each mode (addition can only add positive numbers, for ex.) along with how to enter values "*number* *space* *enterkey*" for example.
+//
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
 #include <math.h>
-#include "calculator.h" //Holds function declarations.
+#include "calculator.h" //Holds custom function declarations.
 
 #define MAX 50
 
 int main(void){
-
 	//Begin main
 	puts("Welcome to Calculator!");
 	puts("Which operation would you like perform?");
 	printf("(1) Exponent\n(2) Multiplication\n(3) Division\n(4) Addition\n(5) Subtraction\n(6) Exit\n>");
 	operationChoice();
-	
-	return(0); //Program successfully exits;
+	return(0); //Program successfully exits.
 }
 
 void operationChoice(void){
-
 	//Variable Declarations
-	char* operation = malloc(sizeof(char));
+	int operation = 0;
+	int continueLoop = 1;
 
 	//Begin operationChoice
-	scanf("%c", operation); //Scan in user choice.
-
-	switch(*operation){
-
-		case '1' :
-			
-			exponent();
-			break;
-
-		case '2' :
-
-			multiplication();
-			break;
-
-		case '3' :
-
-			division();
-			break;
-
-		case '4' :
-
-			addition();
-			break;
-
-		case '5':
-
-			subtraction();
-			break;
-
-		case '6' :
-
-			puts("See you soon!");
-			break;
-
-		default :
-
-			puts("Sorry, but that wasn't a vaild choice.");
-			break;
+	while(continueLoop == 1){
+		fscanf(stdin, "%2d", &operation); //Scan in user choice. The "2" will means fscanf() will only accept up to 2 characters (prevents buffer overflow attacks).
+		switch(operation){
+			case 1 :
+				exponent();
+				continueLoop = 0;
+				break;
+			case 2 :
+				multiplication();
+				continueLoop = 0;
+				break;
+			case 3 :
+				division();
+				continueLoop = 0;
+				break;
+			case 4 :
+				addition();
+				continueLoop = 0;
+				break;
+			case 5 :
+				subtraction();
+				continueLoop = 0;
+				break;
+			case 6 : //Exit program case.
+				puts("See you soon!");
+				continueLoop = 0;
+				break;
+			default : //Error check case.
+				puts("Sorry, but that isn't a vaild choice.");
+				while((getchar()) != '\n'); //Clears input buffer of stray characters, preventing infinite loop in case scanf() fails.
+				printf(">");
+				break;
+		}
 	}
-
-	free(operation);
-	operation = NULL;
 }
 
 void exponent(void){
@@ -93,43 +83,68 @@ void division(void){
 
 
 void addition(void){
-
 	//Variable Declarations
+	int continueOneLoop = 1;
+	int continueTwoLoop = 1;
+	int addendOneError = 1;
+	int addendTwoError = 1;
 	char addendOneString[MAX] = {0};
-	//char addendTwoString[MAX] = {0};
+	char addendTwoString[MAX] = {0};
 	int addendOne = 0;
-	//int addendTwo = 0;
+	int addendTwo = 0;
+	int sum = 0;
 	
 	//Begin addition
-	printf("Type addend one\n>");
-	scanf("%s", addendOneString);
-	printf("strlen is %d\n", strlen(addendOneString));
-	//printf("string is %s\n", addendOneString);
-	//printf("addendOne is %d\n", addendOne);
-	
-	if(strlen(addendOneString) == 1){ //In case of 1 digit number.
-			
-		addendOne = (addendOneString[0] - '0');
-	}
-
-	if(strlen(addendOneString) == 2){ //In case of 2 digit number.
-	
-		addendOne = 10 * (addendOneString[0] - '0');
-		addendOne = addendOne + (addendOneString[1] - '0');
-	}
-
-	else{ //In case of >2 digit number.
-		for(int i = 0; i < strlen(addendOneString); i++){
-			
-			printf("addendOneString[i] -'0'= %d and i = %d\n", addendOneString[i]-'0', i);	
-			printf("pre run addendOne is %d (addenOneString[i] - '0') is %d and 10^(strlen(addendOneString)) is %d\n", addendOne, (addendOneString[i] - '0'), 10^(strlen(addendOneString)));
-			addendOne = addendOne + (addendOneString[i] - '0') * pow(10, strlen(addendOneString));
-			//addendOne = addendOne + (addendOneString[i] - '0') * 10^(strlen(addendOneString));
-			printf("post run addendOne %d\n", addendOne);
+	while(continueOneLoop == 1){
+		printf("Type addend one below.\n>");
+		while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 50 characters in previous iteration of while loop).
+		fscanf(stdin, "%50s", addendOneString); //fscanf() will consume a string up to 50 characters long.
+		for(int i = 0; i < strlen(addendOneString); i++){ //Error check (looking for non-digit characters in input string).
+			addendOneError = isdigit(addendOneString[i]);
+			if(addendOneError == 0){
+				break;
+			}
+		}
+		if(addendOneError == 0){
+			puts("Sorry, but that isn't a valid choice.");
+			for(int i = 0; i < strlen(addendOneString); i++){ //Empty the contents of addendOneString for safe reuse.
+				addendOneString[i] = 0;
+			}
+			addendOneError = 1;
+		}
+		else{
+			for(int i = 0; i < strlen(addendOneString); i++){
+				addendOne = addendOne + (addendOneString[i] - '0') * pow(10, strlen(addendOneString) - i - 1);
+			}
+			while(continueTwoLoop == 1){
+				printf("Type addend two below.\n>");
+				while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 50 characters in previous iteration of while loop).
+				fscanf(stdin, "%50s", addendTwoString); //fscanf() will consume a string up to 50 characters long.
+				for(int i = 0; i < strlen(addendTwoString); i++){ //Error check (looking for non-digit characters in input string).
+					addendTwoError = isdigit(addendTwoString[i]);
+					if(addendTwoError == 0){
+						break;
+					}
+				}
+				if(addendTwoError == 0){
+					puts("Sorry, but that isn't a valid choice.");
+					for(int i = 0; i < strlen(addendTwoString); i++){ //Empty the contents of addendTwoString for safe reuse.
+						addendTwoString[i] = 0;
+					}
+					addendTwoError = 1;
+				}		
+				else{
+					for(int i = 0; i < strlen(addendTwoString); i++){
+						addendTwo = addendTwo + (addendTwoString[i] - '0') * pow(10, strlen(addendTwoString) - i - 1);
+					}
+					continueTwoLoop = 0;
+				}		
+			}
+			continueOneLoop = 0;
 		}
 	}
-	
-	printf("%d\n", addendOne);
+	sum = addendOne + addendTwo;
+	printf("Sum lies below.\n>%d\n", sum);	
 }
 
 void subtraction(void){
