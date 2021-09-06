@@ -11,3 +11,13 @@ void division(void); //Scans in divisor and dividend, then calculates quotient a
 void addition(void); //Scans in two addends, then calculates  sum (15 digit max per scan.)
 
 void subtraction(void); //Scans in minuend and subtrahend, then calculates  difference (15 digit max per scan.)
+
+void emptyString(char*); //Overwrites 0 to each index of given string.
+
+int convertInteger(char*); //Converts string to integer.
+
+void invalid(void); //Prints error message.
+
+int integerTest(char*); //Looks for non-digit characters in string.
+
+void numberScan(char*); //Scans up to 15 characters into string.

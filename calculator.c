@@ -17,29 +17,34 @@
 #include <math.h>
 #include "calculator.h" //Holds custom function declarations.
 
-#define MAX 15 //Calculator will accept at most 15 digit inputs to prevent overflow.
+#define MAX 15 //Calculator accepts at most 15 digit inputs to prevent buffer overflow.
 
 int main(void){
-	//Begin main
-	puts("Welcome to Calculator!");
-	puts("Which operation would you like perform?");
-	printf("(1) Instructions\n(2) Exponent\n(3) Multiplication\n(4) Division\n(5) Addition\n(6) Subtraction\n(7) Exit\n>");
-	operationChoice(); //Calculation type is chosen and values are computed.
+	puts(">Welcome to Calculator!");
+	operationChoice(); //Calculation type chosen and values computed.
 	return(0); //Program successfully exits.
 }
 
 void operationChoice(void){
-	//Variable Declarations
-	int operation = 0;
+	char choiceInput[MAX] = {0};
+	int choiceCheck = 0;
+	int choice;
 	int continueLoop = 1;
 
-	//Begin operationChoice
 	while(continueLoop == 1){
-		fscanf(stdin, "%2d", &operation); //Scan in user choice. The "2" will means fscanf() will only accept up to 2 characters (prevents buffer overflow attacks).
-		switch(operation){
+		puts(">Which operation would you like perform?");
+		printf("(1) Instructions\n(2) Exponent\n(3) Multiplication\n(4) Division\n(5) Addition\n(6) Subtraction\n(7) Exit\n>");
+		numberScan(choiceInput); //Scan in choice for above menu.
+		choiceCheck = integerTest(choiceInput); //Check whether choice is integer.
+		if(choiceCheck == 1){ //choice is not integer.
+			choice = 8;
+		}
+		else{ //choice is integer.
+			choice = convertInteger(choiceInput);
+		}
+		switch(choice){
 			case 1 :
 				printInstructions();
-				printf(">");
 				break;
 			case 2 :
 				exponent();
@@ -62,13 +67,12 @@ void operationChoice(void){
 				continueLoop = 0;
 				break;
 			case 7 : //Exit program case.
-				puts("See you soon!");
+				puts(">See you soon!");
 				continueLoop = 0;
 				break;
 			default : //Error check case.
-				puts("Sorry, but that isn't a vaild choice.");
-				while((getchar()) != '\n'); //Clears input buffer of stray characters, preventing infinite loop in case scanf() fails.
-				printf(">");
+				invalid(); //Prints error message.
+				while((getchar()) != '\n'); //Clears input buffer of stray characters, preventing erroneous loop iterations in case choiceInput runs out of room for characters.
 				break;
 		}
 	}
@@ -92,71 +96,102 @@ void division(void){
 
 
 void addition(void){
-	//Variable Declarations
 	int continueOneLoop = 1;
 	int continueTwoLoop = 1;
-	int addendOneError = 1;
-	int addendTwoError = 1;
+	int addendOneError = 1; //1 = no error, 0 = error.
+	int addendTwoError = 1; //1 = no error, 0 = error.
 	char addendOneString[MAX] = {0};
 	char addendTwoString[MAX] = {0};
 	int addendOne = 0;
 	int addendTwo = 0;
 	int sum = 0;
 
-	//Begin addition
 	while(continueOneLoop == 1){
-		printf("Type addend one below.\n>");
-		while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 15 characters in previous iteration of while loop).
-		fscanf(stdin, "%15s", addendOneString); //fscanf() will consume a string up to 15 characters long.
-		for(int i = 0; i < strlen(addendOneString); i++){ //Error check (looking for non-digit characters in input string).
-			addendOneError = isdigit(addendOneString[i]);
-			if(addendOneError == 0){
-				break;
-			}
-		}
+		printf(">Type addend one below.\n>");
+		while((getchar()) != '\n'); //Clears input buffer of stray characters in case user inputted more than 15 characters in previous iteration of while loop.
+		numberScan(addendOneString); //Scans input string into addendOneString.
+		addendOneError = integerTest(addendOneString); //Looks for non-digit characters in AddendOneString.
 		if(addendOneError == 0){
-			puts("Sorry, but that isn't a valid choice.");
-			for(int i = 0; i < strlen(addendOneString); i++){ //Empty the contents of addendOneString for safe reuse.
-				addendOneString[i] = 0;
-			}
+			invalid(); //Prints error message.
+			emptyString(addendOneString); //Empty the contents of addendOneString for safe reuse.
 			addendOneError = 1;
 		}
 		else{
-			for(int i = 0; i < strlen(addendOneString); i++){
-				addendOne = addendOne + (addendOneString[i] - '0') * pow(10, strlen(addendOneString) - i - 1);
-			}
-			while(continueTwoLoop == 1){
-				printf("Type addend two below.\n>");
-				while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 15 characters in previous iteration of while loop).
-				fscanf(stdin, "%15s", addendTwoString); //fscanf() will consume a string up to 15 characters long.
-				for(int i = 0; i < strlen(addendTwoString); i++){ //Error check (looking for non-digit characters in input string).
-					addendTwoError = isdigit(addendTwoString[i]);
-					if(addendTwoError == 0){
-						break;
-					}
-				}
+			addendOne = convertInteger(addendOneString); //Convert "char* addendOneString" to "int addendOne".
+			/*while(continueTwoLoop == 1){
+				printf(">Type addend two below.\n>");
+				while((getchar()) != '\n'); //Clears input buffer of stray characters in case user inputted more than 15 characters in previous iteration of while loop.
+				numberScan(addendTwoString); //Scans input string into addendTwoString.
+				addendTwoError = integerTest(addendTwoString); //Looks for non-digit character in addendTwoString.
 				if(addendTwoError == 0){
-					puts("Sorry, but that isn't a valid choice.");
-					for(int i = 0; i < strlen(addendTwoString); i++){ //Empty the contents of addendTwoString for safe reuse.
-						addendTwoString[i] = 0;
-					}
+					invalid(); //Prints error message.
+					emptyString(addendTwoString); //Empty the contents of addendTwoString for safe reuse.
 					addendTwoError = 1;
 				}		
 				else{
-					for(int i = 0; i < strlen(addendTwoString); i++){
-						addendTwo = addendTwo + (addendTwoString[i] - '0') * pow(10, strlen(addendTwoString) - i - 1);
-					}
-					continueTwoLoop = 0;
-				}		
-			}
-			continueOneLoop = 0;
+					addendTwo = convertInteger(addendTwoString); //Convert "char* addendTwoString" to "int addendTwo".
+					continueTwoLoop = 0; //Exit addendTwo's while loop.
+				}
+		
+			}*/
+			continueOneLoop = 0; //Exit addendOne's while loop.
 		}
 	}
+	while(continueTwoLoop == 1){
+		printf(">Type addend two below.\n>");
+		while((getchar()) != '\n'); //Clears input buffer of stray characters in case user inputted more than 15 characters in previous iteration of while loop.
+		numberScan(addendTwoString); //Scans input string into addendTwoString.
+		addendTwoError = integerTest(addendTwoString); //Looks for non-digit character in addendTwoString.
+		if(addendTwoError == 0){
+			invalid(); //Prints error message.
+			emptyString(addendTwoString); //Empty the contents of addendTwoString for safe reuse.
+			addendTwoError = 1;
+		}		
+		else{
+			addendTwo = convertInteger(addendTwoString); //Convert "char* addendTwoString" to "int addendTwo".
+			continueTwoLoop = 0; //Exit addendTwo's while loop.
+		}	
+	}
 	sum = addendOne + addendTwo;
-	printf("Sum lies below.\n>%d\n", sum);	
+	printf(">Sum lies below.\n>%d\n", sum);	
 }
 
 void subtraction(void){
 //float minuend, float subtrahend, float* difference
 
-}	
+}
+
+void emptyString(char* string){
+	for(int i = 0; i < strlen(string); i++){ //Overwrites 0 to each index of string.
+		string[i] = 0;
+	}
+}
+
+int convertInteger(char* string){
+	int integer = 0;
+
+	for(int i = 0; i < strlen(string); i++){
+		integer = integer + (string[i] - '0') * pow(10, strlen(string) - i - 1);
+	}
+	return(integer);
+}
+
+void invalid(void){
+	puts(">Sorry, but that's not a valid choice.");
+}
+
+int integerTest(char* string){
+	int error = 1; //1 = no error, 0 = error.
+
+	for(int i = 0; i < strlen(string); i++){ //Looks for non-digit characters in string.
+		error = isdigit(string[i]);
+		if(error == 0){
+			break;
+		}
+	}
+	return(error);
+}
+
+void numberScan(char* string){
+	fscanf(stdin, "%15s", string); //fscanf() will consume a string up to 15 characters long.
+}
