@@ -102,7 +102,11 @@ void addition(void){
 	int addendOne = 0;
 	int addendTwo = 0;
 	int sum = 0;
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 2dbdb1a9dd17d89144ea31f9990813680e250c00
 	//Begin addition
 	while(continueOneLoop == 1){
 		printf("Type addend one below.\n>");
