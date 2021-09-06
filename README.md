@@ -12,3 +12,5 @@ Perhaps for a Calculator v2, id like to take in actual expressions (4 + 6 for ex
 to check for valid inputs (i.e. no letters) but also follow PEMDAS. For example, "(3 + 3^7 - 7/62.5 + 789) / 12" would require an advanced string parsing algorithm (totally doable,
 but potentially better for a v2 of this app as opposed to rewriting what I have already done).
 
+
+15 digit operations will easily cause arithmetic overflow and yield invalid answers with plain int data-type. Need a new data type (double) or to limit the length of string to be scanned in.

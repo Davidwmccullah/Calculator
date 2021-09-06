@@ -18,7 +18,7 @@
 #include "calculator.h" //Holds custom function declarations.
 
 #define MAX 16 //Calculator accepts at most (MAX - 1) digit inputs to prevent buffer overflow.
-//WARNING: if MAX is changed, then width modifier for scanf() inside numberScan() must also be changed.
+//WARNING: if MAX is changed, width modifier for scanf() inside numberScan() must be changed too.
 
 int main(void){
 	puts(">Welcome to Calculator!");
@@ -26,7 +26,7 @@ int main(void){
 	return(0); //Program successfully exits.
 }
 
-void operationChoice(void){
+void operationChoice(void){ //Scans in value 1 to 7, and performs the given choice.
 	char choiceInput[MAX] = {0};
 	int choiceCheck = 0;
 	int choice;
@@ -79,24 +79,24 @@ void operationChoice(void){
 	}
 }
 
-void printInstructions(void){
+void printInstructions(void){ //Prints instruction manual. Use q to quit.
 	//print the user manual
 }
 
-void exponent(void){
+void exponent(void){ //Scans in base and exponent, calculates power (1 digit max per scan).
 	//base, exponent, power
 }
 
-void multiplication(void){
+void multiplication(void){ //Scans in factors, calculates product (15 digit max per scan).
 	//factorOne, factorTwo, product
 }
 
-void division(void){
+void division(void){ //Scans in divisor and dividend, calculates quotient and remainder (15 digit max per scan).
 //float divisor, dividend, float* quotient, float* remainder
 }
 
 
-void addition(void){
+void addition(void){ //Scans in two addends, calculates  sum (15 digit max per scan).
 	int continueOneLoop = 1;
 	int continueTwoLoop = 1;
 	int addendOneError = 1; //1 = no error, 0 = error.
@@ -141,18 +141,18 @@ void addition(void){
 	printf(">Sum lies below.\n>%d\n", sum);	
 }
 
-void subtraction(void){
+void subtraction(void){ //Scans in minuend and subtrahend, calculates  difference (15 digit max per scan).
 //float minuend, float subtrahend, float* difference
 
 }
 
-void emptyString(char* string){
+void emptyString(char* string){ //Overwrites 0 to each index of given string.
 	for(int i = 0; i < strlen(string); i++){ //Overwrites 0 to each index of string.
 		string[i] = 0;
 	}
 }
 
-int convertInteger(char* string){
+int convertInteger(char* string){ //Converts string to integer.
 	int integer = 0;
 
 	for(int i = 0; i < strlen(string); i++){
@@ -161,11 +161,11 @@ int convertInteger(char* string){
 	return(integer);
 }
 
-void invalid(void){
+void invalid(void){ //Prints error message.
 	puts(">Sorry, but that's not a valid choice.");
 }
 
-int integerTest(char* string){
+int integerTest(char* string){ //Looks for non-digit characters in string.
 	int error = 1; //1 = no error, 0 = error.
 
 	for(int i = 0; i < strlen(string); i++){ //Looks for non-digit characters in string.
@@ -177,11 +177,11 @@ int integerTest(char* string){
 	return(error);
 }
 
-void numberScan(char* string){
+void numberScan(char* string){ //Scans up to 16 characters into string.
 	scanf("%16s", string); //fscanf() will consume a string up to 16 characters long.
 }
 
-int lengthTest(char* string){
+int lengthTest(char* string){  //Checks length of string.
 	int error = 0; //0 = no error, 1 = error.
 	
 	if(strlen(string) > MAX - 1){
