@@ -1,6 +1,7 @@
 //Bobby Love
 //4 August 2021
-//A simple calculator application.
+//Calculator
+//A command-line calculator application.
 
 //TODO
 //Don't allow division by 0!!!!!!!!!!
@@ -16,14 +17,14 @@
 #include <math.h>
 #include "calculator.h" //Holds custom function declarations.
 
-#define MAX 50
+#define MAX 15 //Calculator will accept at most 15 digit inputs to prevent overflow.
 
 int main(void){
 	//Begin main
 	puts("Welcome to Calculator!");
 	puts("Which operation would you like perform?");
-	printf("(1) Exponent\n(2) Multiplication\n(3) Division\n(4) Addition\n(5) Subtraction\n(6) Exit\n>");
-	operationChoice();
+	printf("(1) Instructions\n(2) Exponent\n(3) Multiplication\n(4) Division\n(5) Addition\n(6) Subtraction\n(7) Exit\n>");
+	operationChoice(); //Calculation type is chosen and values are computed.
 	return(0); //Program successfully exits.
 }
 
@@ -37,26 +38,29 @@ void operationChoice(void){
 		fscanf(stdin, "%2d", &operation); //Scan in user choice. The "2" will means fscanf() will only accept up to 2 characters (prevents buffer overflow attacks).
 		switch(operation){
 			case 1 :
+				printInstructions();
+				break;
+			case 2 :
 				exponent();
 				continueLoop = 0;
 				break;
-			case 2 :
+			case 3 :
 				multiplication();
 				continueLoop = 0;
 				break;
-			case 3 :
+			case 4 :
 				division();
 				continueLoop = 0;
 				break;
-			case 4 :
+			case 5 :
 				addition();
 				continueLoop = 0;
 				break;
-			case 5 :
+			case 6 :
 				subtraction();
 				continueLoop = 0;
 				break;
-			case 6 : //Exit program case.
+			case 7 : //Exit program case.
 				puts("See you soon!");
 				continueLoop = 0;
 				break;
@@ -97,8 +101,8 @@ void addition(void){
 	//Begin addition
 	while(continueOneLoop == 1){
 		printf("Type addend one below.\n>");
-		while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 50 characters in previous iteration of while loop).
-		fscanf(stdin, "%50s", addendOneString); //fscanf() will consume a string up to 50 characters long.
+		while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 15 characters in previous iteration of while loop).
+		fscanf(stdin, "%15s", addendOneString); //fscanf() will consume a string up to 15 characters long.
 		for(int i = 0; i < strlen(addendOneString); i++){ //Error check (looking for non-digit characters in input string).
 			addendOneError = isdigit(addendOneString[i]);
 			if(addendOneError == 0){
@@ -118,8 +122,8 @@ void addition(void){
 			}
 			while(continueTwoLoop == 1){
 				printf("Type addend two below.\n>");
-				while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 50 characters in previous iteration of while loop).
-				fscanf(stdin, "%50s", addendTwoString); //fscanf() will consume a string up to 50 characters long.
+				while((getchar()) != '\n'); //Clears input buffer of stray characters (in case user inputted more than 15 characters in previous iteration of while loop).
+				fscanf(stdin, "%15s", addendTwoString); //fscanf() will consume a string up to 15 characters long.
 				for(int i = 0; i < strlen(addendTwoString); i++){ //Error check (looking for non-digit characters in input string).
 					addendTwoError = isdigit(addendTwoString[i]);
 					if(addendTwoError == 0){
