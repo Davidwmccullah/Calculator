@@ -17,7 +17,8 @@
 #include <math.h>
 #include "calculator.h" //Holds custom function declarations.
 
-#define MAX 15 //Calculator accepts at most 15 digit inputs to prevent buffer overflow.
+#define MAX 16 //Calculator accepts at most (MAX - 1) digit inputs to prevent buffer overflow.
+//WARNING: if MAX is changed, then width modifier for scanf() inside numberScan() must also be changed.
 
 int main(void){
 	puts(">Welcome to Calculator!");
@@ -106,48 +107,32 @@ void addition(void){
 	int addendTwo = 0;
 	int sum = 0;
 
-	while(continueOneLoop == 1){
+	while(continueOneLoop == 1){ //Get addendOne.
 		printf(">Type addend one below.\n>");
 		while((getchar()) != '\n'); //Clears input buffer of stray characters in case user inputted more than 15 characters in previous iteration of while loop.
 		numberScan(addendOneString); //Scans input string into addendOneString.
 		addendOneError = integerTest(addendOneString); //Looks for non-digit characters in AddendOneString.
 		if(addendOneError == 0){
 			invalid(); //Prints error message.
-			emptyString(addendOneString); //Empty the contents of addendOneString for safe reuse.
+			emptyString(addendOneString); //Empty the contents of addendOneString for reuse.
 			addendOneError = 1;
 		}
-		else{
+		else if(lengthTest(addendOneString) == 0){ //Checks length of string inside addendOneString.
 			addendOne = convertInteger(addendOneString); //Convert "char* addendOneString" to "int addendOne".
-			/*while(continueTwoLoop == 1){
-				printf(">Type addend two below.\n>");
-				while((getchar()) != '\n'); //Clears input buffer of stray characters in case user inputted more than 15 characters in previous iteration of while loop.
-				numberScan(addendTwoString); //Scans input string into addendTwoString.
-				addendTwoError = integerTest(addendTwoString); //Looks for non-digit character in addendTwoString.
-				if(addendTwoError == 0){
-					invalid(); //Prints error message.
-					emptyString(addendTwoString); //Empty the contents of addendTwoString for safe reuse.
-					addendTwoError = 1;
-				}		
-				else{
-					addendTwo = convertInteger(addendTwoString); //Convert "char* addendTwoString" to "int addendTwo".
-					continueTwoLoop = 0; //Exit addendTwo's while loop.
-				}
-		
-			}*/
 			continueOneLoop = 0; //Exit addendOne's while loop.
 		}
 	}
-	while(continueTwoLoop == 1){
+	while(continueTwoLoop == 1){ //Get addendTwo.
 		printf(">Type addend two below.\n>");
 		while((getchar()) != '\n'); //Clears input buffer of stray characters in case user inputted more than 15 characters in previous iteration of while loop.
 		numberScan(addendTwoString); //Scans input string into addendTwoString.
 		addendTwoError = integerTest(addendTwoString); //Looks for non-digit character in addendTwoString.
 		if(addendTwoError == 0){
 			invalid(); //Prints error message.
-			emptyString(addendTwoString); //Empty the contents of addendTwoString for safe reuse.
+			emptyString(addendTwoString); //Empty the contents of addendTwoString for reuse.
 			addendTwoError = 1;
-		}		
-		else{
+		}	
+		else if(lengthTest(addendTwoString) == 0){ //Checks length of string inside addendTwoString.
 			addendTwo = convertInteger(addendTwoString); //Convert "char* addendTwoString" to "int addendTwo".
 			continueTwoLoop = 0; //Exit addendTwo's while loop.
 		}	
@@ -193,5 +178,16 @@ int integerTest(char* string){
 }
 
 void numberScan(char* string){
-	fscanf(stdin, "%15s", string); //fscanf() will consume a string up to 15 characters long.
+	scanf("%16s", string); //fscanf() will consume a string up to 16 characters long.
+}
+
+int lengthTest(char* string){
+	int error = 0; //0 = no error, 1 = error.
+	
+	if(strlen(string) > MAX - 1){
+		puts("Sorry, but that string is too long.");
+		emptyString(string); //Empty the contents of string for reuse.
+		error = 1;
+	}
+	return(error);
 }

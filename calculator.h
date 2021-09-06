@@ -21,3 +21,5 @@ void invalid(void); //Prints error message.
 int integerTest(char*); //Looks for non-digit characters in string.
 
 void numberScan(char*); //Scans up to 15 characters into string.
+
+int lengthTest(char*); //Checks the length of a string.
