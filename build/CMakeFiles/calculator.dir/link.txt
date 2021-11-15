@@ -1,0 +1,1 @@
+/usr/bin/cc -Wall -Werror -lm CMakeFiles/calculator.dir/src/calculator.c.o -o calculator  -Wl,-rpath,/home/dmac/Documents/Personal/Projects/Calculator/build libcalc.so 
