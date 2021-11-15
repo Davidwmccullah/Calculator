@@ -1,1 +1,0 @@
-/usr/bin/cc -fPIC -Wall -Werror -lm -shared -Wl,-soname,libcalc.so -o libcalc.so CMakeFiles/calc.dir/src/calculator.c.o 

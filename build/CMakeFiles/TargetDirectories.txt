@@ -1,4 +1,0 @@
-/home/dmac/Documents/Personal/Projects/Calculator/build/CMakeFiles/rebuild_cache.dir
-/home/dmac/Documents/Personal/Projects/Calculator/build/CMakeFiles/calculator.dir
-/home/dmac/Documents/Personal/Projects/Calculator/build/CMakeFiles/edit_cache.dir
-/home/dmac/Documents/Personal/Projects/Calculator/build/CMakeFiles/calc.dir
