@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include <math.h>
+
 void operationChoice(void); //Scans in value 1 to 7, and performs the given choice.
 
 void printInstructions(void); //Prints instruction manual. Use q to quit.
