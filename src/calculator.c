@@ -11,8 +11,8 @@
 
 int main(void) {
 	puts(">Welcome to Calculator!");
-	operationChoice(); //Calculation type chosen and values computed.
-	return 0;		   //Program successfully exits.
+	operationChoice(); // Calculation type chosen and values computed.
+	return 0;		   // Program successfully exits.
 }
 
 void operationChoice(void) { //Scans in value 1 to 7, and performs the given choice.
